@@ -40,13 +40,111 @@ def compute_canvas_size(images, homographies):
 
 
 def warp_image(img, H, canvas_size):
-    """Warp a single image onto the output canvas using homography *H*."""
-    return cv2.warpPerspective(
+    """Warp a single image onto the output canvas using homography *H*.
+
+    Returns
+    -------
+    warped : np.ndarray — the warped BGR image
+    mask   : np.ndarray — uint8 binary mask (255 where content exists)
+    """
+    warped = cv2.warpPerspective(
         img, H, canvas_size,
-        flags=cv2.INTER_LINEAR,
+        flags=cv2.INTER_LANCZOS4,
         borderMode=cv2.BORDER_CONSTANT,
         borderValue=0,
     )
+    # Warp a white image to get a precise content mask
+    white = np.ones(img.shape[:2], dtype=np.uint8) * 255
+    mask = cv2.warpPerspective(
+        white, H, canvas_size,
+        flags=cv2.INTER_NEAREST,
+        borderMode=cv2.BORDER_CONSTANT,
+        borderValue=0,
+    )
+    # Erode mask slightly to remove interpolation artifacts at borders
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+    mask = cv2.erode(mask, kernel, iterations=1)
+    # Zero out warped pixels outside the eroded mask
+    warped[mask == 0] = 0
+    return warped, mask
+
+
+def refine_alignment_ecc(warped_images, masks, ref_index,
+                         motion=cv2.MOTION_AFFINE,
+                         min_overlap=5000,
+                         max_shift=40.0):
+    """
+    Refine warped image alignment to the reference image using ECC.
+
+    This is a local post-warp correction step that helps reduce
+    ghosting when global homographies are imperfect.
+    """
+    n = len(warped_images)
+    if n <= 1:
+        return warped_images, masks
+
+    out_images = [img.copy() for img in warped_images]
+    out_masks = [m.copy() for m in masks]
+
+    ref_gray = cv2.cvtColor(out_images[ref_index], cv2.COLOR_BGR2GRAY)
+    ref_gray = cv2.GaussianBlur(ref_gray, (5, 5), 0)
+
+    criteria = (
+        cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT,
+        120,
+        1e-6,
+    )
+
+    for i in range(n):
+        if i == ref_index:
+            continue
+
+        overlap = ((out_masks[i] > 0) & (out_masks[ref_index] > 0)).astype(np.uint8)
+        if int(overlap.sum()) < min_overlap:
+            continue
+
+        img_gray = cv2.cvtColor(out_images[i], cv2.COLOR_BGR2GRAY)
+        img_gray = cv2.GaussianBlur(img_gray, (5, 5), 0)
+
+        warp = np.eye(2, 3, dtype=np.float32)
+        try:
+            _, warp = cv2.findTransformECC(
+                ref_gray,
+                img_gray,
+                warp,
+                motion,
+                criteria,
+                inputMask=overlap,
+                gaussFiltSize=5,
+            )
+        except cv2.error:
+            continue
+
+        # Reject unstable solutions.
+        tx, ty = float(warp[0, 2]), float(warp[1, 2])
+        if abs(tx) > max_shift or abs(ty) > max_shift:
+            continue
+
+        A = warp[:, :2]
+        det = float(np.linalg.det(A))
+        if det < 0.85 or det > 1.15:
+            continue
+
+        h, w = out_images[i].shape[:2]
+        out_images[i] = cv2.warpAffine(
+            out_images[i], warp, (w, h),
+            flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP,
+            borderMode=cv2.BORDER_CONSTANT,
+            borderValue=0,
+        )
+        out_masks[i] = cv2.warpAffine(
+            out_masks[i], warp, (w, h),
+            flags=cv2.INTER_NEAREST + cv2.WARP_INVERSE_MAP,
+            borderMode=cv2.BORDER_CONSTANT,
+            borderValue=0,
+        )
+
+    return out_images, out_masks
 
 
 def cylindrical_warp_vectorized(img, focal_length=None):

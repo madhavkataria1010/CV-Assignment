@@ -57,44 +57,53 @@ def load_images(images_dir: str, max_dim: int = MAX_DIMENSION) -> list:
     return images
 
 
-def gain_compensate(warped_images):
+def gain_compensate(warped_images, masks=None):
     """
     Compute per-image gain factors to minimise intensity differences in
     overlapping regions.
 
-    Solves:  argmin_{g_i}  Σ_{i<j}  Σ_{overlap}  (g_i · I_i − g_j · I_j)²
-
-    with constraint  Σ g_i = N  (average gain = 1).
+    Uses a ratio-chain approach along consecutive image pairs, then
+    normalises so the geometric mean gain is 1.0.
     """
     n = len(warped_images)
-    masks = [(img > 0).any(axis=2) for img in warped_images]
+    if masks is not None:
+        bin_masks = [m > 0 for m in masks]
+    else:
+        bin_masks = [(img > 0).any(axis=2) for img in warped_images]
 
-    A_rows, b_rows = [], []
-    for i in range(n):
-        for j in range(i + 1, n):
-            overlap = masks[i] & masks[j]
-            if overlap.sum() < 100:
-                continue
-            mean_i = warped_images[i][overlap].mean()
-            mean_j = warped_images[j][overlap].mean()
-            if mean_i < 1 or mean_j < 1:
-                continue
-            row = np.zeros(n)
-            row[i]  =  mean_i
-            row[j]  = -mean_j
-            A_rows.append(row)
-            b_rows.append(0.0)
+    # Compute per-image grayscale once
+    grays = [cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).astype(np.float64)
+             for img in warped_images]
 
-    if len(A_rows) < 1:
-        return warped_images
+    # Build gain chain: gain[i] relative to gain[0]=1
+    log_gains = np.zeros(n, dtype=np.float64)
+    for i in range(n - 1):
+        j = i + 1
+        overlap = bin_masks[i] & bin_masks[j]
+        n_overlap = overlap.sum()
+        if n_overlap < 200:
+            # No useful overlap — keep same gain as previous
+            continue
+        # Per-pixel ratio in overlap (robust via median)
+        vals_i = grays[i][overlap]
+        vals_j = grays[j][overlap]
+        # Avoid dark pixels that are noisy
+        bright = (vals_i > 15) & (vals_j > 15)
+        if bright.sum() < 100:
+            continue
+        ratio = np.median(vals_j[bright] / vals_i[bright])
+        # ratio = median(I_j / I_i) → to match, multiply I_i by ratio
+        # Equivalently: gain_j = gain_i / ratio
+        log_gains[j] = log_gains[i] - np.log(ratio)
 
-    A_rows.append(np.ones(n))
-    b_rows.append(float(n))
+    # Convert to linear gains and normalise so geometric mean = 1
+    gains = np.exp(log_gains)
+    gains /= np.exp(np.mean(np.log(gains)))  # geomean = 1
 
-    A = np.array(A_rows)
-    b = np.array(b_rows)
-    gains, _, _, _ = np.linalg.lstsq(A, b, rcond=None)
-    gains = np.clip(gains, 0.5, 2.0)
+    # Soft clip to prevent extreme corrections
+    gains = np.clip(gains, 0.6, 1.6)
+    # Re-normalise after clipping
+    gains /= np.exp(np.mean(np.log(gains)))
     print(f"  Gain factors: {np.round(gains, 3)}")
 
     return [

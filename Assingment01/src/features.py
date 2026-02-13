@@ -85,20 +85,38 @@ def match_features(des1, des2, kp1, kp2,
     """
     FLANN_INDEX_KDTREE = 1
     index_params  = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
-    search_params = dict(checks=50)
+    search_params = dict(checks=100)
     flann = cv2.FlannBasedMatcher(index_params, search_params)
 
-    matches = flann.knnMatch(des1, des2, k=2)
+    # Forward matches: des1 -> des2
+    matches_fwd = flann.knnMatch(des1, des2, k=2)
 
-    good = []
-    for pair in matches:
+    good_fwd = {}
+    for pair in matches_fwd:
         if len(pair) == 2:
             m, n = pair
             if m.distance < LOWE_RATIO * n.distance:
-                good.append(m)
+                good_fwd[m.queryIdx] = m
+
+    # Reverse matches: des2 -> des1 (cross-check)
+    matches_rev = flann.knnMatch(des2, des1, k=2)
+
+    good_rev = {}
+    for pair in matches_rev:
+        if len(pair) == 2:
+            m, n = pair
+            if m.distance < LOWE_RATIO * n.distance:
+                good_rev[m.queryIdx] = m
+
+    # Keep only mutually consistent matches
+    good = []
+    for qidx, m_fwd in good_fwd.items():
+        tidx = m_fwd.trainIdx
+        if tidx in good_rev and good_rev[tidx].trainIdx == qidx:
+            good.append(m_fwd)
 
     print(f"  {pair_label}: {len(good)} good matches "
-          f"(from {len(matches)} raw)")
+          f"(from {len(matches_fwd)} raw, cross-checked)")
 
     if output_dir and img1 is not None and img2 is not None:
         vis = cv2.drawMatches(
