@@ -1,0 +1,93 @@
+{
+  "bbox": [
+    115,
+    54,
+    274,
+    218
+  ],
+  "beta": 0.0020704148285374535,
+  "case_name": "coffee",
+  "graph_cut_metrics": {
+    "bbox_fill_ratio": 0.5302960576775579,
+    "bbox_leakage_ratio": 0.0,
+    "boundary_length": 682.278174593052,
+    "compactness": 0.37328993239786273,
+    "component_count": 5.0,
+    "data_energy": 387804.75,
+    "edge_alignment_score": 3.5410539411806146,
+    "foreground_fraction": 0.14066569010416666,
+    "seed_consistency_rate": 1.0,
+    "smooth_energy": 13253.48974609375,
+    "total_energy": 401058.23974609375
+  },
+  "iteration_records": [
+    {
+      "data_energy": 540093.0,
+      "foreground_fraction": 0.19581095377604166,
+      "iteration": 1,
+      "mask_change": 1.0,
+      "maxflow_value": 554556.2036298069,
+      "runtime_seconds": 0.07505366718396544,
+      "smooth_energy": 14463.25390625,
+      "total_energy": 554556.25390625
+    },
+    {
+      "data_energy": 386003.0,
+      "foreground_fraction": 0.16168212890625,
+      "iteration": 2,
+      "mask_change": 0.034271240234375,
+      "maxflow_value": 402164.9087252221,
+      "runtime_seconds": 0.05555541580542922,
+      "smooth_energy": 16161.907470703125,
+      "total_energy": 402164.9074707031
+    },
+    {
+      "data_energy": 387804.75,
+      "foreground_fraction": 0.14066569010416666,
+      "iteration": 3,
+      "mask_change": 0.021016438802083332,
+      "maxflow_value": 401058.220243732,
+      "runtime_seconds": 0.04871170921251178,
+      "smooth_energy": 13253.48974609375,
+      "total_energy": 401058.23974609375
+    }
+  ],
+  "naive_metrics": {
+    "bbox_fill_ratio": 0.7736999539806719,
+    "bbox_leakage_ratio": 0.11029282060328101,
+    "boundary_length": 3961.014285349873,
+    "compactness": 0.018161992624330773,
+    "component_count": 304.0,
+    "data_energy": 526781.125,
+    "edge_alignment_score": 2.9684760045483736,
+    "foreground_fraction": 0.23067220052083334,
+    "seed_consistency_rate": 1.0,
+    "smooth_energy": 152207.45703125,
+    "total_energy": 678988.58203125
+  },
+  "original_shape": [
+    400,
+    600,
+    3
+  ],
+  "refined_metrics": {
+    "bbox_fill_ratio": 0.5303344071176561,
+    "bbox_leakage_ratio": 0.0,
+    "boundary_length": 629.2426406871193,
+    "compactness": 0.4388987568491062,
+    "component_count": 1.0,
+    "data_energy": 387835.9375,
+    "edge_alignment_score": 3.1325190180250475,
+    "foreground_fraction": 0.14067586263020834,
+    "seed_consistency_rate": 1.0,
+    "smooth_energy": 13350.2431640625,
+    "total_energy": 401186.1806640625
+  },
+  "resized_shape": [
+    256,
+    384,
+    3
+  ],
+  "scale_factor": 0.64,
+  "target_label": "coffee cup"
+}

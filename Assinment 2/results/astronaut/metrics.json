@@ -1,0 +1,93 @@
+{
+  "bbox": [
+    82,
+    19,
+    304,
+    382
+  ],
+  "beta": 0.0014558041616415328,
+  "case_name": "astronaut",
+  "graph_cut_metrics": {
+    "bbox_fill_ratio": 0.5222743404561586,
+    "bbox_leakage_ratio": 0.007335078657515507,
+    "boundary_length": 1786.6923881554253,
+    "compactness": 0.1669036765174281,
+    "component_count": 5.0,
+    "data_energy": 572425.125,
+    "edge_alignment_score": 4.545288133456235,
+    "foreground_fraction": 0.28753662109375,
+    "seed_consistency_rate": 1.0,
+    "smooth_energy": 15226.627197265625,
+    "total_energy": 587651.7521972656
+  },
+  "iteration_records": [
+    {
+      "data_energy": 721605.375,
+      "foreground_fraction": 0.3812594943576389,
+      "iteration": 1,
+      "mask_change": 1.0,
+      "maxflow_value": 745293.2780107277,
+      "runtime_seconds": 0.16346425004303455,
+      "smooth_energy": 23687.890625,
+      "total_energy": 745293.265625
+    },
+    {
+      "data_energy": 582372.875,
+      "foreground_fraction": 0.2954169379340278,
+      "iteration": 2,
+      "mask_change": 0.10249837239583333,
+      "maxflow_value": 596420.202593259,
+      "runtime_seconds": 0.14647775003686547,
+      "smooth_energy": 14047.396484375,
+      "total_energy": 596420.271484375
+    },
+    {
+      "data_energy": 572425.125,
+      "foreground_fraction": 0.28753662109375,
+      "iteration": 3,
+      "mask_change": 0.012112087673611112,
+      "maxflow_value": 587651.7468670553,
+      "runtime_seconds": 0.07706483383662999,
+      "smooth_energy": 15226.627197265625,
+      "total_energy": 587651.7521972656
+    }
+  ],
+  "naive_metrics": {
+    "bbox_fill_ratio": 0.6972426972426973,
+    "bbox_leakage_ratio": 0.031959064831245804,
+    "boundary_length": 13340.971788237754,
+    "compactness": 0.00409812106190059,
+    "component_count": 642.0,
+    "data_energy": 699387.625,
+    "edge_alignment_score": 2.1747131338727486,
+    "foreground_fraction": 0.3936292860243056,
+    "seed_consistency_rate": 1.0,
+    "smooth_energy": 608325.3515625,
+    "total_energy": 1307712.9765625
+  },
+  "original_shape": [
+    512,
+    512,
+    3
+  ],
+  "refined_metrics": {
+    "bbox_fill_ratio": 0.5178442905715633,
+    "bbox_leakage_ratio": 0.006144466407868728,
+    "boundary_length": 1645.0710678118655,
+    "compactness": 0.19497371507382386,
+    "component_count": 1.0,
+    "data_energy": 572677.0,
+    "edge_alignment_score": 4.179214141892258,
+    "foreground_fraction": 0.2847561306423611,
+    "seed_consistency_rate": 1.0,
+    "smooth_energy": 18576.8134765625,
+    "total_energy": 591253.8134765625
+  },
+  "resized_shape": [
+    384,
+    384,
+    3
+  ],
+  "scale_factor": 0.75,
+  "target_label": "astronaut subject"
+}

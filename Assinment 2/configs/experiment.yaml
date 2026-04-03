@@ -1,0 +1,22 @@
+dataset_config: configs/dataset.yaml
+output_dir: results
+max_dim: 384
+histogram_bins: [16, 16, 16]
+lambda_smooth: 28.0
+hard_seed_cost: 1000000.0
+bbox_outside_penalty: 4.0
+distance_prior_weight: 1.0
+probability_smoothing: 1.0
+max_iterations: 3
+convergence_tol: 0.002
+
+refinement:
+  min_object_size: 96
+  min_hole_size: 96
+  opening_radius: 1
+  closing_radius: 1
+  smoothing_sigma: 0.4
+
+visualization:
+  overlay_alpha: 0.42
+  figure_dpi: 180

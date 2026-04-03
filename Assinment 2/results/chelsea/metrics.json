@@ -1,0 +1,93 @@
+{
+  "bbox": [
+    47,
+    13,
+    298,
+    251
+  ],
+  "beta": 0.005473902782597874,
+  "case_name": "chelsea",
+  "graph_cut_metrics": {
+    "bbox_fill_ratio": 0.605175934915799,
+    "bbox_leakage_ratio": 0.006267179769103903,
+    "boundary_length": 1086.4497474683058,
+    "compactness": 0.3873051502562839,
+    "component_count": 1.0,
+    "data_energy": 328505.9375,
+    "edge_alignment_score": 2.5532816730361434,
+    "foreground_fraction": 0.3715277777777778,
+    "seed_consistency_rate": 1.0,
+    "smooth_energy": 17326.08935546875,
+    "total_energy": 345832.02685546875
+  },
+  "iteration_records": [
+    {
+      "data_energy": 446850.5625,
+      "foreground_fraction": 0.4167279411764706,
+      "iteration": 1,
+      "mask_change": 1.0,
+      "maxflow_value": 467325.5244377462,
+      "runtime_seconds": 0.0757339159026742,
+      "smooth_energy": 20474.95654296875,
+      "total_energy": 467325.51904296875
+    },
+    {
+      "data_energy": 327873.96875,
+      "foreground_fraction": 0.38065767973856207,
+      "iteration": 2,
+      "mask_change": 0.036070261437908493,
+      "maxflow_value": 346203.9517235028,
+      "runtime_seconds": 0.08358566602692008,
+      "smooth_energy": 18329.998291015625,
+      "total_energy": 346203.9670410156
+    },
+    {
+      "data_energy": 328505.9375,
+      "foreground_fraction": 0.3715277777777778,
+      "iteration": 3,
+      "mask_change": 0.009129901960784314,
+      "maxflow_value": 345832.0328582268,
+      "runtime_seconds": 0.0891730000730604,
+      "smooth_energy": 17326.08935546875,
+      "total_energy": 345832.02685546875
+    }
+  ],
+  "naive_metrics": {
+    "bbox_fill_ratio": 0.8208343098195453,
+    "bbox_leakage_ratio": 0.04185473943373,
+    "boundary_length": 9205.026478658692,
+    "compactness": 0.007589874655698967,
+    "component_count": 145.0,
+    "data_energy": 431257.1875,
+    "edge_alignment_score": 1.578235100862675,
+    "foreground_fraction": 0.522640931372549,
+    "seed_consistency_rate": 1.0,
+    "smooth_energy": 326967.4765625,
+    "total_energy": 758224.6640625
+  },
+  "original_shape": [
+    300,
+    451,
+    3
+  ],
+  "refined_metrics": {
+    "bbox_fill_ratio": 0.6050252770430882,
+    "bbox_leakage_ratio": 0.006214083422695153,
+    "boundary_length": 1067.0710678118655,
+    "compactness": 0.40137889627442297,
+    "component_count": 1.0,
+    "data_energy": 328514.5,
+    "edge_alignment_score": 2.5508932055865,
+    "foreground_fraction": 0.3714154411764706,
+    "seed_consistency_rate": 1.0,
+    "smooth_energy": 18507.466552734375,
+    "total_energy": 347021.9665527344
+  },
+  "resized_shape": [
+    255,
+    384,
+    3
+  ],
+  "scale_factor": 0.8514412416851441,
+  "target_label": "cat"
+}

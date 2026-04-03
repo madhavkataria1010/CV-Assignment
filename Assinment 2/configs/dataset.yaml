@@ -1,0 +1,19 @@
+items:
+  - name: astronaut
+    image_path: data/input/astronaut.png
+    fg_scribble_path: data/annotations/astronaut_fg.png
+    bg_scribble_path: data/annotations/astronaut_bg.png
+    bbox: [110, 25, 405, 510]
+    target_label: astronaut subject
+  - name: coffee
+    image_path: data/input/coffee.png
+    fg_scribble_path: data/annotations/coffee_fg.png
+    bg_scribble_path: data/annotations/coffee_bg.png
+    bbox: [180, 85, 428, 340]
+    target_label: coffee cup
+  - name: chelsea
+    image_path: data/input/chelsea.png
+    fg_scribble_path: data/annotations/chelsea_fg.png
+    bg_scribble_path: data/annotations/chelsea_bg.png
+    bbox: [55, 15, 350, 295]
+    target_label: cat
